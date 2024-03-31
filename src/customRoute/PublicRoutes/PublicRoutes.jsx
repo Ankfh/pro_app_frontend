@@ -2,8 +2,10 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-const PublicRoute = () => {
-  return <Outlet />;
+const PublicRoute = ({ element }) => {
+  const userid = localStorage.getItem("user_id");
+
+  return !userid ? <Outlet /> : <Navigate to={"/"} />;
 };
 
 export default PublicRoute;

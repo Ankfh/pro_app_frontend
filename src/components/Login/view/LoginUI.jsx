@@ -1,26 +1,15 @@
-import { Button } from "@mui/material";
 import React from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import InputField from "../../shared/InputField/UI/InputField";
-import SignUpValidation from "../helper/validation/validation";
-import CardTemplate from "../../shared/CardWrapper/UI/CardTemplate";
 import MuiButton from "../../shared/Button/UI/MuiButton";
+import CardTemplate from "../../shared/CardWrapper/UI/CardTemplate";
+import InputField from "../../shared/InputField/UI/InputField";
 
-const SignUpMian = ({ onSubmit, control, handleSubmit, errors }) => {
+const LoginUI = ({ onSubmit, control, handleSubmit, errors }) => {
   return (
     <div className="w-full flex justify-center items-center h-screen ">
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardTemplate>
           <div className="flex  flex-col gap-4">
-            <InputField
-              name="name"
-              control={control}
-              label="Name"
-              type="text"
-              errors={errors}
-            />
-
+            <p className="w-full text-center">Login</p>
             <InputField
               name="email"
               control={control}
@@ -41,7 +30,7 @@ const SignUpMian = ({ onSubmit, control, handleSubmit, errors }) => {
             <MuiButton
               variant="contained"
               type="submit"
-              title={"Sign Up"}
+              title={"LogIn"}
               size={"small"}
             />
           </div>
@@ -51,4 +40,4 @@ const SignUpMian = ({ onSubmit, control, handleSubmit, errors }) => {
   );
 };
 
-export default SignUpMian;
+export default LoginUI;

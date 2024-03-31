@@ -1,20 +1,18 @@
 import React, { useContext } from "react";
-import SignUpMian from "../UI/SignUp_mainUI";
-import axios from "axios";
-import { baseUrl } from "../../../BaseURl/BaseUrl";
 import { UseDArkTheme } from "../../DarkTheme/Context/ThemeContext";
-import SignUpValidation from "../helper/validation/validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { SetBackendValidation } from "../helper/BackendValidation/SetBackendValidation";
-import { useRegisterUserMutation } from "../../../redux/Slice/user/userSlice";
+
+import LoginUI from "../view/LoginUI.jsx";
+import LoginValidtion from "../Helper/validation/LoginValidtion";
+import { SetBackendValidation } from "../../shared/validation/BackendValidtion/CustomValidation";
+import { useLoginUserMutation } from "../../../redux/Slice/user/userSlice.jsx";
 import { useNavigate } from "react-router-dom";
 
-const SingUpContainer = () => {
-  const [RegisterUser, { isLoading }] = useRegisterUserMutation();
+const LoginContainer = () => {
+  const [LoginUser, { isLoading }] = useLoginUserMutation();
   const { darkMode, toggleTheme } = UseDArkTheme();
   const navigate = useNavigate();
-
   const {
     control,
     handleSubmit,
@@ -22,23 +20,27 @@ const SingUpContainer = () => {
     reset,
     setError,
   } = useForm({
-    resolver: yupResolver(SignUpValidation()),
+    resolver: yupResolver(LoginValidtion()),
   });
-  console.log(darkMode);
   const onSubmit = async (formData) => {
     try {
       console.log(formData);
-      // const response = await axios.post(`${baseUrl}/register`, data);
-      const { error, data } = await RegisterUser(formData);
+      const { error, data } = await LoginUser(formData);
       console.log(data, "responseeeeeeeeee");
+      console.log(error, "error");
 
       if (error) {
         error.data?.errorName === "emailError"
           ? SetBackendValidation(setError, "email", error.data.message)
+          : error.data?.errorName === "passwordError"
+          ? SetBackendValidation(setError, "password", error.data.message)
           : null;
       }
       if (data?.success) {
-        navigate("/login");
+        localStorage.setItem("user_email", data.data?.email);
+        localStorage.setItem("user_id", data.data?._id);
+        localStorage.setItem("user_name", data.data?.userName);
+        navigate("/");
       }
       console.log(isLoading, "isLoading");
     } catch (error) {
@@ -49,7 +51,7 @@ const SingUpContainer = () => {
   };
   return (
     <div>
-      <SignUpMian
+      <LoginUI
         onSubmit={onSubmit}
         control={control}
         handleSubmit={handleSubmit}
@@ -59,4 +61,4 @@ const SingUpContainer = () => {
   );
 };
 
-export default SingUpContainer;
+export default LoginContainer;
